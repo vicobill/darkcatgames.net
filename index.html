@@ -811,18 +811,42 @@
                 display: grid;
             }
 
-            /* ===== GAME PREVIEW GALLERY ===== */
-            .preview-gallery {
-                display: grid;
-                grid-template-columns: 1.6fr 1fr;
-                grid-template-rows: 1fr 1fr;
-                gap: 1.2rem;
-                max-width: 900px;
-                margin: 0 auto;
+            /* ===== GAME PREVIEW SCROLL ===== */
+            .scroll-hint {
+                text-align: center;
+                color: var(--orange);
+                font-size: 0.85rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+                letter-spacing: 2px;
+                opacity: 0.7;
             }
 
-            .preview-card {
-                position: relative;
+            .screenshot-scroll {
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                padding-bottom: 1rem;
+                margin: 0 -2rem;
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+
+            .screenshot-scroll::-webkit-scrollbar {
+                display: none;
+            }
+
+            .screenshot-track {
+                display: flex;
+                gap: 1.2rem;
+                width: max-content;
+            }
+
+            .screenshot-item {
+                flex-shrink: 0;
+                width: 220px;
                 border-radius: var(--radius-md);
                 overflow: hidden;
                 cursor: pointer;
@@ -830,78 +854,34 @@
                 transition: all 0.4s ease;
                 border: 2px solid var(--border);
                 background: white;
+                position: relative;
             }
 
-            .preview-card:hover {
-                transform: translateY(-5px) scale(1.01);
+            .screenshot-item:hover {
+                transform: translateY(-8px) scale(1.03);
                 box-shadow: var(--shadow-hover);
                 border-color: var(--orange);
             }
 
-            .preview-card.main-card {
-                grid-row: 1 / 3;
-            }
-
-            .preview-img-wrapper {
+            .screenshot-item img {
                 width: 100%;
-                height: 100%;
-                min-height: 200px;
-                overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: linear-gradient(135deg, #fff5eb, #ffe8d6);
-            }
-
-            .preview-card.main-card .preview-img-wrapper {
-                min-height: 420px;
-            }
-
-            .preview-img-wrapper img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
+                height: auto;
                 display: block;
                 transition: transform 0.5s ease;
             }
 
-            .preview-card:hover .preview-img-wrapper img {
+            .screenshot-item:hover img {
                 transform: scale(1.05);
             }
 
-            .preview-overlay {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                padding: 1.5rem 1.2rem 1rem;
-                background: linear-gradient(
-                    to top,
-                    rgba(26, 26, 46, 0.85) 0%,
-                    rgba(26, 26, 46, 0.4) 60%,
-                    transparent 100%
-                );
-                display: flex;
-                align-items: center;
-                gap: 0.6rem;
-                opacity: 0;
-                transform: translateY(10px);
-                transition: all 0.4s ease;
-            }
-
-            .preview-card:hover .preview-overlay {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            .preview-icon {
-                font-size: 1.2rem;
-            }
-
-            .preview-label {
-                color: white;
+            .screenshot-caption {
+                padding: 0.8rem;
+                text-align: center;
+                background: white;
                 font-weight: 700;
-                font-size: 0.95rem;
+                font-size: 0.9rem;
+                color: var(--text-dark);
+                border-top: 1px solid var(--border);
             }
 
             /* Lightbox */
@@ -956,21 +936,11 @@
             }
 
             @media (max-width: 768px) {
-                .preview-gallery {
-                    grid-template-columns: 1fr;
-                    grid-template-rows: auto;
+                .screenshot-item {
+                    width: 180px;
                 }
-                .preview-card.main-card {
-                    grid-row: auto;
-                }
-                .preview-card.main-card .preview-img-wrapper,
-                .preview-img-wrapper {
-                    min-height: 250px;
-                }
-                .preview-overlay {
-                    opacity: 1;
-                    transform: translateY(0);
-                    padding: 1rem 0.8rem 0.8rem;
+                .scroll-hint {
+                    font-size: 0.8rem;
                 }
             }
         </style>
@@ -1240,69 +1210,76 @@
                     <h2 class="section-title" data-lang="en">Screenshots</h2>
                     <h2 class="section-title" data-lang="zh">游戏截图</h2>
                     <p class="section-desc" data-lang="en">
-                        Take a peek at what's coming soon
+                        Swipe to explore the world of Animal Merge: Defense
                     </p>
                     <p class="section-desc" data-lang="zh">
-                        抢先看看即将上线的精彩内容
+                        滑动探索 Animal Merge: Defense 的精彩世界
                     </p>
                 </div>
 
-                <div class="preview-gallery fade-in">
-                    <div
-                        class="preview-card main-card"
-                        onclick="openLightbox(0)"
-                    >
-                        <div class="preview-img-wrapper">
+                <div class="scroll-hint fade-in" data-lang="en">
+                    ← Swipe to browse →
+                </div>
+                <div class="scroll-hint fade-in" data-lang="zh">
+                    ← 滑动浏览 →
+                </div>
+
+                <div class="screenshot-scroll fade-in">
+                    <div class="screenshot-track">
+                        <div class="screenshot-item" onclick="openLightbox(0)">
                             <img
-                                src="images/screenshot-battle.webp"
-                                alt="Battle Gameplay"
+                                src="images/screenshot-1.webp"
+                                alt="Boss Raid Event"
                                 loading="lazy"
                             />
+                            <div class="screenshot-caption">
+                                <span data-lang="en">Boss Raid</span>
+                                <span data-lang="zh">Boss 突袭</span>
+                            </div>
                         </div>
-                        <div class="preview-overlay">
-                            <span class="preview-icon">🔍</span>
-                            <span class="preview-label" data-lang="en"
-                                >Battle Gameplay</span
-                            >
-                            <span class="preview-label" data-lang="zh"
-                                >战斗玩法</span
-                            >
-                        </div>
-                    </div>
-                    <div class="preview-card" onclick="openLightbox(1)">
-                        <div class="preview-img-wrapper">
+                        <div class="screenshot-item" onclick="openLightbox(1)">
                             <img
-                                src="images/screenshot-hero.webp"
+                                src="images/screenshot-2.webp"
                                 alt="Hero Collection"
                                 loading="lazy"
                             />
+                            <div class="screenshot-caption">
+                                <span data-lang="en">Collect Heroes</span>
+                                <span data-lang="zh">收集英雄</span>
+                            </div>
                         </div>
-                        <div class="preview-overlay">
-                            <span class="preview-icon">🔍</span>
-                            <span class="preview-label" data-lang="en"
-                                >Hero Collection</span
-                            >
-                            <span class="preview-label" data-lang="zh"
-                                >英雄收集</span
-                            >
-                        </div>
-                    </div>
-                    <div class="preview-card" onclick="openLightbox(2)">
-                        <div class="preview-img-wrapper">
+                        <div class="screenshot-item" onclick="openLightbox(2)">
                             <img
-                                src="images/screenshot-gacha.webp"
-                                alt="Gacha System"
+                                src="images/screenshot-3.webp"
+                                alt="Skill Upgrades"
                                 loading="lazy"
                             />
+                            <div class="screenshot-caption">
+                                <span data-lang="en">Unlock Skills</span>
+                                <span data-lang="zh">解锁技能</span>
+                            </div>
                         </div>
-                        <div class="preview-overlay">
-                            <span class="preview-icon">🔍</span>
-                            <span class="preview-label" data-lang="en"
-                                >Gacha & Rewards</span
-                            >
-                            <span class="preview-label" data-lang="zh"
-                                >抽卡与奖励</span
-                            >
+                        <div class="screenshot-item" onclick="openLightbox(3)">
+                            <img
+                                src="images/screenshot-4.webp"
+                                alt="Merge Gameplay"
+                                loading="lazy"
+                            />
+                            <div class="screenshot-caption">
+                                <span data-lang="en">Merge for Power</span>
+                                <span data-lang="zh">合成升级</span>
+                            </div>
+                        </div>
+                        <div class="screenshot-item" onclick="openLightbox(4)">
+                            <img
+                                src="images/screenshot-5.webp"
+                                alt="Game Poster"
+                                loading="lazy"
+                            />
+                            <div class="screenshot-caption">
+                                <span data-lang="en">Merge. Defend. Win.</span>
+                                <span data-lang="zh">合成 · 防守 · 胜利</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1443,19 +1420,29 @@
             // Lightbox
             const screenshots = [
                 {
-                    src: "images/screenshot-battle.webp",
-                    captionEn: "Battle Gameplay",
-                    captionZh: "战斗玩法",
+                    src: "images/screenshot-1.webp",
+                    captionEn: "Boss Raid",
+                    captionZh: "Boss 突袭",
                 },
                 {
-                    src: "images/screenshot-hero.webp",
-                    captionEn: "Hero Collection",
-                    captionZh: "英雄收集",
+                    src: "images/screenshot-2.webp",
+                    captionEn: "Collect Heroes",
+                    captionZh: "收集英雄",
                 },
                 {
-                    src: "images/screenshot-gacha.webp",
-                    captionEn: "Gacha & Rewards",
-                    captionZh: "抽卡与奖励",
+                    src: "images/screenshot-3.webp",
+                    captionEn: "Unlock Skills",
+                    captionZh: "解锁技能",
+                },
+                {
+                    src: "images/screenshot-4.webp",
+                    captionEn: "Merge for Power",
+                    captionZh: "合成升级",
+                },
+                {
+                    src: "images/screenshot-5.webp",
+                    captionEn: "Merge. Defend. Win.",
+                    captionZh: "合成 · 防守 · 胜利",
                 },
             ];
 
